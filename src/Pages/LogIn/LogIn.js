@@ -1,18 +1,49 @@
 import React, { useRef } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, Form, Spinner } from 'react-bootstrap';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import auth from '../../firebase.init';
 
 const LogIn = () => {
+    // protecting private route
+    let location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    const navigate = useNavigate()
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+    
     const emailRef = useRef('');
     const passwordRef = useRef('');
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = emailRef.current.value; // get email from input
-    const password = passwordRef.current.value; // get password from input
- 
-    console.log(email, password);
-}
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const email = emailRef.current.value; // get email from input
+        const password = passwordRef.current.value; // get password from input
+
+        signInWithEmailAndPassword(email, password);
+    }
+
+
+    if (user) {
+        navigate(from, { replace: true });
+    }
+
+
+
+    if (loading) {
+        return <div className='p-5 m-5 d-flex align-items-center justify-content-center'>
+            <Spinner animation="border" size="sm" />
+            <Spinner animation="border" />
+            <Spinner animation="border" size="sm" />
+        </div>;
+    }
+
 
     return (
         <section className='p-5'>

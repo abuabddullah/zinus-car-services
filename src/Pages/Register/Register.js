@@ -1,8 +1,17 @@
 import React, { useRef } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, Form, Spinner } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from './../../firebase.init'
 
 const Register = () => {
+    const navigate = useNavigate()
+    const [
+      createUserWithEmailAndPassword,
+      user,
+      loading,
+      error,
+    ] = useCreateUserWithEmailAndPassword(auth);
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,8 +19,24 @@ const handleSubmit = (e) => {
     const email = e.target.email.value; // get email from input
     const password = e.target.password.value; // get password from input
 
-    console.log(email, password, name);
+    // console.log(email, password, name);
+    createUserWithEmailAndPassword(email, password)
 }
+
+
+if (user) {
+    navigate(`/home`)
+}
+
+
+
+if (loading) {
+    return <div className='p-5 m-5 d-flex align-items-center justify-content-center'>
+    <Spinner animation="border" size="sm" />
+    <Spinner animation="border" />
+    <Spinner animation="border" size="sm" />
+    </div>;
+  }
 
     return (
         <section className='p-5'>
