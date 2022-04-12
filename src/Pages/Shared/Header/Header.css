@@ -1,0 +1,16 @@
+/* a{
+    text-decoration: none;
+    color: #000;
+}
+a:hover{
+    text-decoration: underline;
+    color: rgb(255, 111, 111);
+}
+a:active{
+    text-decoration: underline;
+    color: rgb(202, 88, 88);
+}
+a#logo:hover{
+    
+    text-decoration: none;
+} */
